@@ -9,12 +9,8 @@ class ReplyTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testExample()
+    /** @test */
+    public function a_reply_has_a_user()
     {
         $reply = factory('App\Reply')->create();
 
