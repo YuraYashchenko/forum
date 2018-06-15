@@ -31,5 +31,18 @@
                 @endforeach
             </div>
         </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-8">
+                <form action="{{ route('add.reply', $thread->id) }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <textarea name="body" id="body" placeholder="Type a reply" rows="10" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button class="form-control">Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 @endsection

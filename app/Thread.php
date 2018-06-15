@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
+    protected $fillable = ['title', 'body', 'user_id'];
+
       /**
      * Generate url for thread.
      *
