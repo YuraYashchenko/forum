@@ -15,7 +15,7 @@ class ReadThreadTest extends TestCase
     {
         parent::setUp();
 
-        $this->thread = factory('App\Thread')->create();
+        $this->thread = create('App\Thread');
     }
 
     /** @test */
@@ -35,7 +35,7 @@ class ReadThreadTest extends TestCase
     /** @test */
     public function a_user_can_read_a_reply()
     {
-        $reply = factory('App\Reply')->create([
+        $reply = create('App\Reply', [
             'thread_id' => $this->thread->id
         ]);
 

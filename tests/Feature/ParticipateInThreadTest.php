@@ -21,10 +21,10 @@ class ParticipateInThreadTest extends TestCase
     /** @test */
     public function a_user_can_add_replies()
     {
-        $this->be($user = factory('App\User')->create());
+        $this->signIn();
 
-        $thread = factory('App\Thread')->create();
-        $reply = factory('App\Reply')->make();
+        $thread = create('App\Thread');
+        $reply = make('App\Reply');
 
         $this->post('/threads/' . $thread->id . '/replies', $reply->toArray());
 
