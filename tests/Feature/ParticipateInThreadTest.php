@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -13,9 +14,12 @@ class ParticipateInThreadTest extends TestCase
     /** @test */
     public function unauthenticated_user_cant_add_reply()
     {
-        $this->expectException('Illuminate\Auth\AuthenticationException');
+        $this->expectException(AuthenticationException::class);
+        $this->withoutExceptionHandling();
 
-        $this->post('/threads/1/replies', []);
+        $thread = create('App\Thread');
+
+        $this->post(route('add.reply', [$thread->channel->slug, $thread->id]), []);
     }
 
     /** @test */
@@ -26,9 +30,21 @@ class ParticipateInThreadTest extends TestCase
         $thread = create('App\Thread');
         $reply = make('App\Reply');
 
-        $this->post('/threads/' . $thread->id . '/replies', $reply->toArray());
+        $this->post(route('add.reply', [$thread->channel->slug, $thread->id]), $reply->toArray());
 
         $this->get($thread->path())
             ->assertSee($reply->body);
+    }
+
+    /** @test */
+    public function a_reply_requires_a_body()
+    {
+        $this->signIn();
+
+        $reply = make('App\Reply', ['body' => null]);
+        $thread = create('App\Thread');
+
+        $this->post(route('add.reply', [$thread->channel->slug, $thread->id]), $reply->toArray())
+            ->assertSessionHasErrors('body');
     }
 }

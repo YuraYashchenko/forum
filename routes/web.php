@@ -15,10 +15,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('threads', 'ThreadsController');
+Route::resource('threads', 'ThreadsController')->except(['show']);
+
+Route::get('threads/{channel}/{thread}', 'ThreadsController@show');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::post('/threads/{thread}/replies', 'RepliesController@store')->name('add.reply');
+Route::post('/threads/{channel}/{thread}/replies', 'RepliesController@store')->name('add.reply');

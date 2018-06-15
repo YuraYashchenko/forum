@@ -7,7 +7,7 @@
                 @foreach($threads as $thread)
                     <div class="card">
                         <div class="card-header">
-                            <a href="{{ route('threads.show', $thread->id) }}">
+                            <a href="{{ $thread->path() }}">
                                 {{ $thread->title }}
                             </a>
                         </div>

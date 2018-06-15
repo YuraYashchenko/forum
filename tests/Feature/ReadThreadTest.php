@@ -21,8 +21,9 @@ class ReadThreadTest extends TestCase
     /** @test */
     public function a_user_can_get_all_threads()
     {
-        $this->get('/threads')
-            ->assertSee($this->thread->title);
+        $this->get(route('threads.index'))
+            ->assertSee($this->thread->title)
+            ->assertSee($this->thread->body);
     }
 
     /** @test */
