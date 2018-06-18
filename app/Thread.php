@@ -2,10 +2,14 @@
 
 namespace App;
 
+use App\Filters\Filterable;
 use Illuminate\Database\Eloquent\Model;
+
 
 class Thread extends Model
 {
+    use Filterable;
+
     protected $fillable = ['title', 'body', 'user_id', 'channel_id'];
 
       /**
