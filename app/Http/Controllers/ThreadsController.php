@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\ThreadsFilter;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -11,14 +12,18 @@ class ThreadsController extends Controller
     {
         $this->middleware('auth')->except(['index', 'show']);
     }
+
     /**
      * Display a listing of the resource.
      *
+     * @param ThreadsFilter $filters
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ThreadsFilter $filters)
     {
-        $threads = Thread::latest()->get();
+        $threads = Thread::latest()
+            ->filter($filters)
+            ->get();
 
         return view('threads.index', compact('threads'));
     }

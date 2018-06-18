@@ -37,7 +37,27 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('threads.index') }}">All threads</a>
                         </li>
-                        <li class="nav-item"></li>
+
+                        @auth
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('threads.index') . '?by=' . auth()->user()->name }}">My threads</a>
+                            </li>
+                        @endauth
+
+                        <li class="nav-item">
+                            <a href="{{ route('threads.create') }}" class="nav-link">New Thread</a>
+                        </li>
+
+                        <li class="dropdown nav-item">
+                            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">Channels <span class="caret"></span></a>
+
+                            <ul class="dropdown-menu">
+                                @foreach ($channels as $channel)
+                                    <li><a class="nav-link" href="/threads/{{ $channel->slug }}">{{ $channel->name }}</a></li>
+                                @endforeach
+                            </ul>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

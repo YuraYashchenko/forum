@@ -13,16 +13,35 @@
                                 @csrf
 
                                 <div class="form-group">
-                                    <input type="text" name="title" class="form-control">
+                                    <select name="channel_id" id="channel_id">
+                                        <option value="">Choose a Channel</option>
+                                        @foreach($channels as $channel)
+                                            <option value="{{ $channel->id }}" {{ $channel->id == old('channel_id') ? 'selected' : '' }}>{{ $channel->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                 <div class="form-group">
-                                    <textarea name="body" id="body"  rows="8" class="form-control"></textarea>
+                                    <input type="text" id="title" name="title" value="{{ old('title') }}" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <textarea name="body" id="body"  rows="8" class="form-control">{{ old('body') }}</textarea>
                                 </div>
 
                                 <div class="form-group">
                                     <button class="btn btn-primary">Publish</button>
                                 </div>
+
+                                @if (count($errors) > 0)
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                             </form>
                         </div>
                     </div>
