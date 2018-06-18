@@ -34,15 +34,26 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('threads.index') }}">All threads</a>
-                        </li>
+                        <li class="dropdown nav-item">
+                            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">Browse <span class="caret"></span></a>
 
-                        @auth
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('threads.index') . '?by=' . auth()->user()->name }}">My threads</a>
-                            </li>
-                        @endauth
+                            <ul class="dropdown-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('threads.index') }}">All threads</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('threads.index') . '?popular' }}">All popular threads</a>
+                                </li>
+
+                                @auth
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('threads.index') . '?by=' . auth()->user()->name }}">My threads</a>
+                                </li>
+                                @endauth
+                            </ul>
+                        </li>
 
                         <li class="nav-item">
                             <a href="{{ route('threads.create') }}" class="nav-link">New Thread</a>

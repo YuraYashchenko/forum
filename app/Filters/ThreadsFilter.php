@@ -14,4 +14,11 @@ class ThreadsFilter extends QueryFilter
 
         $this->builder->whereUserId($user->id);
     }
+
+    public function popular()
+    {
+        $this->builder->getQuery()->orders = [];
+
+        $this->builder->orderBy('replies_count', 'desc');
+    }
 }

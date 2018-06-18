@@ -16,7 +16,6 @@ Route::get('/', function () {
 });
 
 Route::resource('threads', 'ThreadsController')->except(['show']);
-
 Route::get('threads/{channel}/{thread}', 'ThreadsController@show');
 
 Route::get('threads/{channel}', 'ChannelsController@index')->name('sort.channel');
@@ -26,3 +25,5 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('/threads/{channel}/{thread}/replies', 'RepliesController@store')->name('add.reply');
+
+Route::post('/replies/{reply}/favourites', 'FavouritesController@store')->name('favourites.reply');

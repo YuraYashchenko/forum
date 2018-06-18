@@ -16,4 +16,29 @@ class Reply extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function favourites()
+    {
+        return $this->morphMany(Favourite::class, 'favouritable');
+    }
+
+    /**
+     * Favourite a reply.
+     *
+     * @param int $userId
+     */
+    public function favourite(int $userId)
+    {
+        $attributes = ['user_id' => $userId];
+
+        if (! $this->favourites()->where($attributes)->exists())
+        {
+            $this->favourites()->create([
+                'user_id' => $userId
+            ]);
+        }
+    }
 }
