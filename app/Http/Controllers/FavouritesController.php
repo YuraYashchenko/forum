@@ -17,9 +17,12 @@ class FavouritesController extends Controller
 
     /**
      * @param Reply $reply
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Reply $reply)
     {
        $reply->favourite(auth()->id());
+
+       return back();
     }
 }
