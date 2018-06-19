@@ -6,7 +6,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <a href="#">{{ $thread->user->name }}</a> posted:  {{ $thread->title }}
+                        <a href="{{ route('profiles.show', $thread->user->name) }}">{{ $thread->user->name }}</a> posted:  {{ $thread->title }}
                     </div>
 
                     <div class="card-body">
@@ -19,7 +19,7 @@
                 <div class="card">
                     <div class="card-body">
                         <p>
-                            A thread was posted by <a href="#">{{ $thread->user->name }}</a> {{ $thread->created_at->diffForHumans() }},
+                            A thread was posted by <a href="{{ route('profiles.show', $thread->user->name) }}">{{ $thread->user->name }}</a> {{ $thread->created_at->diffForHumans() }},
                             and has {{ $thread->replies_count }} {{ str_plural('comment', $thread->replies_count) }}.
                         </p>
                     </div>

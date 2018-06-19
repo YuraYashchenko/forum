@@ -3,7 +3,7 @@
         <div class="d-flex justify-content-between">
             <div>
                 <p>
-                    <a href="#">{{ $reply->user->name }}</a> said  {{ $reply->user->created_at->diffForHumans()  }} ...
+                    <a href="{{ route('profiles.show', $reply->user->name) }}">{{ $reply->user->name }}</a> said  {{ $reply->user->created_at->diffForHumans()  }} ...
                 </p>
             </div>
             <form action="{{ route('favourites.reply', $reply->id) }}" method="POST">

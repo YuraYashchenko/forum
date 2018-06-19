@@ -14,16 +14,18 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::resource('threads', 'ThreadsController')->except(['show']);
-Route::get('threads/{channel}/{thread}', 'ThreadsController@show');
-
-Route::get('threads/{channel}', 'ChannelsController@index')->name('sort.channel');
+Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('threads', 'ThreadsController')->except(['show', 'delete']);
+Route::get('threads/{channel}/{thread}', 'ThreadsController@show');
+Route::delete('threads/{channel}/{thread}', 'ThreadsController@destroy');
+
+Route::get('threads/{channel}', 'ChannelsController@index')->name('sort.channel');
 
 Route::post('/threads/{channel}/{thread}/replies', 'RepliesController@store')->name('add.reply');
-
 Route::post('/replies/{reply}/favourites', 'FavouritesController@store')->name('favourites.reply');
+
+Route::get('/profile/{user}', 'ProfilesController@show')->name('profiles.show');

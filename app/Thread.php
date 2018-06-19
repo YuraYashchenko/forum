@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-    use Filterable;
+    use Filterable, RecordsActivity;
 
     protected $fillable = ['title', 'body', 'user_id', 'channel_id'];
 
@@ -20,9 +20,13 @@ class Thread extends Model
         static::addGlobalScope('replyCount', function ($query) {
             $query->withCount('replies');
         });
+
+        static::deleting(function ($thread) {
+            $thread->replies()->delete();
+        });
     }
 
-      /**
+    /**
      * Generate url for thread.
      *
      * @return string
