@@ -6,32 +6,19 @@
             <div class="page-header">
                 <h1>
                     {{ $profileUser->name }}
-                    <small>Since {{ $profileUser->created_at->diffForHumans() }}</small>
                 </h1>
             </div>
 
             <hr>
 
-            @foreach ($profileUser->threads as $thread)
-                <div class="card">
-                    <div class="card-header">
-                        <div class="d-flex justify-content-between">
-                       <span>
-                            <a href="{{ route('profiles.show', $thread->user->name) }}">{{ $thread->user->name }}</a> posted:
-                           {{ $thread->title }}
-                       </span>
-
-                            <span>{{ $thread->created_at->diffForHumans() }}</span>
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-                        {{ $thread->body }}
-                    </div>
-                </div>
+            @foreach ($activities as $date => $activity)
+                <h3 class="page-header">{{ $date }}</h3>
+                @foreach($activity as $record)
+                    @include("profiles.activities.{$record->type}", ['activity' => $record])
+                @endforeach
             @endforeach
 
-            {{ $threads->links() }}
+            {{--{{ $threads->links() }}--}}
         </div>
     </div>
 @endsection

@@ -10,7 +10,7 @@ class Reply extends Model
 
     protected $fillable = ['user_id', 'body'];
 
-    protected $with = ['user', 'favourites'];
+    protected $with = ['user', 'favourites', 'thread'];
     
     /**
      * User that leave a reply.
@@ -20,5 +20,15 @@ class Reply extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Thread relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function thread()
+    {
+        return $this->belongsTo(Thread::class);
     }
 }

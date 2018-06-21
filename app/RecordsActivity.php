@@ -15,8 +15,8 @@ trait RecordsActivity
 
         foreach (self::getActivitiesToRecord() as $event)
         {
-            static::$event(function ($thread) use ($event) {
-                $thread->recordActivity($event);
+            static::$event(function ($model) use ($event) {
+                $model->recordActivity($event);
             });
         }
     }
