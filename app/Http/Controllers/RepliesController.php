@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Reply;
 use App\Thread;
 
 
@@ -31,6 +32,32 @@ class RepliesController extends Controller
             'user_id' => auth()->id()
         ]);
 
-        return redirect()->back();
+        return back()->with('flash', 'Your reply has been left.');
+    }
+
+    public function update(Reply $reply)
+    {
+        $this->authorize('update', $reply);
+
+        $this->validate(request(), [
+            'body' => 'required'
+        ]);
+
+        $reply->update(request(['body']));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Reply $reply
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function destroy(Reply $reply)
+    {
+        $this->authorize('update', $reply);
+
+        $reply->delete();
+
+        return response([], 204);
     }
 }

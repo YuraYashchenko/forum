@@ -19,6 +19,9 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        [v-cloak] {display: none;}
+    </style>
 </head>
 <body>
     <div id="app">
@@ -27,6 +30,8 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <flash message="{{ session('flash') }}"></flash>
     </div>
 </body>
 </html>

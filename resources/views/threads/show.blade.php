@@ -39,7 +39,7 @@
         <div class="row mt-3">
             <div class="col-md-8">
                 @auth
-                    <form action="{{ route('add.reply', [$thread->channel->slug, $thread->id]) }}" method="POST">
+                    <form action="{{ route('replies.store', [$thread->channel->slug, $thread->id]) }}" method="POST">
                         @csrf
 
                         <div class="form-group">
