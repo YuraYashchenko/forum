@@ -17,4 +17,16 @@ class Activity extends Model
     {
         return $this->morphTo();
     }
+
+    public static function feed(User $user, $take = 50)
+    {
+        return self::where('user_id', $user->id)
+            ->latest()
+            ->take($take)
+            ->with('subject')
+            ->get()
+            ->groupBy(function ($activity) {
+                return $activity->created_at->format('Y-m-d');
+            });
+    }
 }

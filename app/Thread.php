@@ -14,6 +14,9 @@ class Thread extends Model
 
     protected $with = ['channel', 'user'];
 
+    /**
+     * Boot the model.
+     */
     public static function boot(){
         parent::boot();
 
@@ -22,7 +25,7 @@ class Thread extends Model
         });
 
         static::deleting(function ($thread) {
-            $thread->replies()->delete();
+            $thread->replies->each->delete();
         });
     }
 
