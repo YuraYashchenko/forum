@@ -20,8 +20,8 @@ window.flash = function (message) {
     window.events.$emit('flash', message);
 }
 
-Vue.component('flash', require('./components/FlashComponent.vue'));
-Vue.component('reply', require('./components/ReplyComponent.vue'));
+Vue.component('flash', require('./components/Flash.vue'));
+Vue.component('reply', require('./components/Reply.vue'));
 
 const app = new Vue({
     el: '#app'

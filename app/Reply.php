@@ -11,6 +11,8 @@ class Reply extends Model
     protected $fillable = ['user_id', 'body'];
 
     protected $with = ['user', 'favourites', 'thread'];
+
+    protected $appends = ['favouritesCount', 'isFavourite'];
     
     /**
      * User that leave a reply.

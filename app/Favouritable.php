@@ -32,13 +32,28 @@ trait Favouritable
     }
 
     /**
+     * @param int $userId
+     */
+    public function unfavourite(int $userId)
+    {
+        $attributes = ['user_id' => $userId];
+
+        $this->favourites()->where($attributes)->delete();
+    }
+
+    /**
      * Is the reply favourited by current user.
      *
      * @return bool
      */
     public function isFavourite() : bool
     {
-        return $this->favourites->where('user_id', auth()->id())->count();
+        return !! $this->favourites->where('user_id', auth()->id())->count();
+    }
+
+    public function getIsFavouriteAttribute()
+    {
+        return $this->isFavourite();
     }
 
     /**

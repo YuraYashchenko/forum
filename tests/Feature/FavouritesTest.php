@@ -41,4 +41,17 @@ class FavouritesTest extends TestCase
 
         $this->assertEquals(1, $reply->favourites()->count());
     }
+
+    /** @test */
+    public function an_authenticated_user_can_unfavourite_a_reply()
+    {
+        $this->signIn();
+
+        $reply = create('App\Reply');
+
+        $reply->favourite(auth()->id());
+        $this->delete(route('unfavourites.reply', $reply->id));
+
+        $this->assertCount(0, $reply->favourites);
+    }
 }

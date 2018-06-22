@@ -29,5 +29,6 @@ Route::resource('replies', 'RepliesController')->only(['update', 'destroy']);
 Route::post('/threads/{channel}/{thread}/replies', 'RepliesController@store')->name('replies.store');
 
 Route::post('/replies/{reply}/favourites', 'FavouritesController@store')->name('favourites.reply');
+Route::delete('/replies/{reply}/favourites', 'FavouritesController@destroy')->name('unfavourites.reply');
 
 Route::get('/profile/{user}', 'ProfilesController@show')->name('profiles.show');

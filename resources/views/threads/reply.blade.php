@@ -7,10 +7,7 @@
                         <a href="{{ route('profiles.show', $reply->user->name) }}">{{ $reply->user->name }}</a> said  {{ $reply->user->created_at->diffForHumans()  }} ...
                     </p>
                 </div>
-                <form action="{{ route('favourites.reply', $reply->id) }}" method="POST">
-                    @csrf
-                    <button class="btn btn-default" {{ $reply->isFavourite() ? 'disabled' : '' }}>{{ $reply->favourites_count }} {{ str_plural('Like', $reply->favourites_count) }}</button>
-                </form>
+               <favourite :reply="{{ $reply }}"></favourite>
             </div>
         </div>
 
