@@ -9,7 +9,7 @@
                         </p>
                     </div>
 
-                        <favourite :reply="data" v-if="signIn"></favourite>
+                        <favourite :reply="data" v-if="signedIn"></favourite>
 
                 </div>
             </div>
@@ -54,8 +54,8 @@
         },
 
         computed: {
-            signIn() {
-                return window.App.signIn;
+            signedIn() {
+                return window.App.signedIn;
             },
 
             canUpdate() {
@@ -79,7 +79,7 @@
                     .then(() => {
                         this.$emit('deleted')
 
-                        flash('Deleted!')
+                        flash('You delete a reply!')
                     });
             }
         }

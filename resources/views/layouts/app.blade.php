@@ -21,7 +21,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <script>
         window.App = {!! json_encode([
-            'signIn' => Auth::check(),
+            'signedIn' => Auth::check(),
             'user' => Auth::user()
         ]) !!}
     </script>

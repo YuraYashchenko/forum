@@ -27,12 +27,12 @@ class RepliesController extends Controller
             'body' => 'required'
         ]);
 
-        $thread->addReply([
+        $reply = $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id()
-        ]);
+        ])->load('user');
 
-        return back()->with('flash', 'Your reply has been left.');
+        return response($reply, 201);
     }
 
     public function update(Reply $reply)

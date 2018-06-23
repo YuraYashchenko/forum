@@ -30,27 +30,7 @@
 
             <div class="row">
                 <div class="col-md-8">
-                    <replies :data="{{ $thread->replies }}"  @removed="repliesCount--"></replies>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-md-8">
-                    @auth
-                        <form action="{{ route('replies.store', [$thread->channel->slug, $thread->id]) }}" method="POST">
-                            @csrf
-
-                            <div class="form-group">
-                                <textarea name="body" id="body" placeholder="Type a reply" rows="10" class="form-control"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <button class="form-control">Post</button>
-                            </div>
-                        </form>
-                    @endauth
-                    @guest
-                    <p class="text-center">Please <a href="{{ route('login') }}">sign in</a> to leave a reply</p>
-                    @endguest
+                    <replies :data="{{ $thread->replies }}"  @added="repliesCount++" @removed="repliesCount--"></replies>
                 </div>
             </div>
         </div>
