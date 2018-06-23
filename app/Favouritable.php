@@ -7,6 +7,15 @@ namespace App;
 trait Favouritable
 {
     /**
+     * Boot a model.
+     */
+    protected static function bootFavouritable()
+    {
+        self::deleting(function ($model) {
+            $model->favourites->each->delete();
+        });
+    }
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function favourites()
@@ -38,7 +47,7 @@ trait Favouritable
     {
         $attributes = ['user_id' => $userId];
 
-        $this->favourites()->where($attributes)->delete();
+        $this->favourites()->where($attributes)->get()->each->delete();
     }
 
     /**

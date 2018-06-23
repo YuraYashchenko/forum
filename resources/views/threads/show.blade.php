@@ -1,62 +1,58 @@
 @extends('layouts.app')
 
 @section ('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <a href="{{ route('profiles.show', $thread->user->name) }}">{{ $thread->user->name }}</a> posted:  {{ $thread->title }}
-                    </div>
+    <thread-view :initial-replies-count="{{ $thread->replies_count }}" inline-template>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <a href="{{ route('profiles.show', $thread->user->name) }}">{{ $thread->user->name }}</a> posted:  {{ $thread->title }}
+                        </div>
 
-                    <div class="card-body">
-                        {{ $thread->body }}
+                        <div class="card-body">
+                            {{ $thread->body }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <p>
+                                A thread was posted by <a href="{{ route('profiles.show', $thread->user->name) }}">{{ $thread->user->name }}</a> {{ $thread->created_at->diffForHumans() }},
+                                and has <span v-text="repliesCount"></span> {{ str_plural('comment', $thread->replies_count) }}.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <p>
-                            A thread was posted by <a href="{{ route('profiles.show', $thread->user->name) }}">{{ $thread->user->name }}</a> {{ $thread->created_at->diffForHumans() }},
-                            and has {{ $thread->replies_count }} {{ str_plural('comment', $thread->replies_count) }}.
-                        </p>
-                    </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <replies :data="{{ $thread->replies }}"  @removed="repliesCount--"></replies>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-8">
+                    @auth
+                        <form action="{{ route('replies.store', [$thread->channel->slug, $thread->id]) }}" method="POST">
+                            @csrf
+
+                            <div class="form-group">
+                                <textarea name="body" id="body" placeholder="Type a reply" rows="10" class="form-control"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <button class="form-control">Post</button>
+                            </div>
+                        </form>
+                    @endauth
+                    @guest
+                    <p class="text-center">Please <a href="{{ route('login') }}">sign in</a> to leave a reply</p>
+                    @endguest
                 </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-md-8">
-                @foreach($replies as $reply)
-                    @include('threads.reply')
-                @endforeach
-
-                {{ $replies->links() }}
-            </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col-md-8">
-                @auth
-                    <form action="{{ route('replies.store', [$thread->channel->slug, $thread->id]) }}" method="POST">
-                        @csrf
-
-                        <div class="form-group">
-                            <textarea name="body" id="body" placeholder="Type a reply" rows="10" class="form-control"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <button class="form-control">Post</button>
-                        </div>
-                    </form>
-                @endauth
-                @guest
-                <p class="text-center">Pleas <a href="{{ route('login') }}">sign in</a> to leave a reply</p>
-                @endguest
-            </div>
-        </div>
-
-
-    </div>
+    </thread-view>
 @endsection

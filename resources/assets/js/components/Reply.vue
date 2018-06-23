@@ -1,21 +1,71 @@
+<template>
+        <div :id="'reply-' + data.id" class="card mt-3 mb-3">
+            <div class="card-header">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p>
+                            <a :href="`/profile/${data.user.name}`" v-text="data.user.name"></a>
+                            said {{ data.user.created_at }} ...
+                        </p>
+                    </div>
+
+                        <favourite :reply="data" v-if="signIn"></favourite>
+
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div v-if="editing" >
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3" v-model="body"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-sm btn-default ml-3" @click="update">Update</button>
+                        <button class="btn btn-sm btn-link" @click="editing = false">Cancel</button>
+                    </div>
+                </div>
+
+                <div v-else v-text="body"></div>
+            </div>
+
+            <div class="card-footer">
+                <div v-if="canUpdate">
+                    <button class="btn btn-sm btn-default ml-3" @click="editing = true">Edit</button>
+                    <button class="btn btn-sm btn-danger" @click="destroy">Delete</button>
+                </div>
+            </div>
+        </div>
+</template>
+
 <script>
     import Favourite from './Favourite.vue';
 
     export default {
-        props: ['attributes'],
+        props: ['data'],
 
         components: { Favourite },
 
         data() {
             return {
                 editing: false,
-                body: this.attributes.body
+                body: this.data.body
             };
+        },
+
+        computed: {
+            signIn() {
+                return window.App.signIn;
+            },
+
+            canUpdate() {
+                return this.authorize(user => this.data.user.id == user.id);
+            }
         },
 
         methods: {
             update() {
-                axios.patch('/replies/' + this.attributes.id, {
+                axios.patch('/replies/' + this.data.id, {
                     body: this.body
                 }).then(() => {
                     this.editing = false;
@@ -25,9 +75,11 @@
             },
 
             destroy() {
-                axios.delete('/replies/' + this.attributes.id)
-                    .then((data) => {
-                        $(this.$el).fadeOut(300, () => flash('Deleted!'));
+                axios.delete('/replies/' + this.data.id)
+                    .then(() => {
+                        this.$emit('deleted')
+
+                        flash('Deleted!')
                     });
             }
         }

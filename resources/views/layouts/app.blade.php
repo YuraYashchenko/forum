@@ -19,6 +19,12 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <script>
+        window.App = {!! json_encode([
+            'signIn' => Auth::check(),
+            'user' => Auth::user()
+        ]) !!}
+    </script>
     <style>
         [v-cloak] {display: none;}
     </style>
