@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="signedIn">
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <textarea name="body" id="body" placeholder="Type a reply" rows="5" v-model="body" class="form-control"></textarea>
             </div>
 
