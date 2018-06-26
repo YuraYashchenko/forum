@@ -12,7 +12,7 @@ class FavouritesTest extends TestCase
     /** @test */
     public function a_guest_cant_favourite_anything()
     {
-        $this->post(route('favourites.reply', 1))
+        $this->post(route('favourites.store', 1))
             ->assertRedirect('/login');
     }
     
@@ -23,7 +23,7 @@ class FavouritesTest extends TestCase
 
         $reply = create('App\Reply');
 
-        $this->post(route('favourites.reply', $reply->id));
+        $this->post(route('favourites.store', $reply->id));
 
         $this->assertCount(1, $reply->favourites);
     }
@@ -36,8 +36,8 @@ class FavouritesTest extends TestCase
 
         $reply = create('App\Reply');
 
-        $this->post(route('favourites.reply', $reply->id));
-        $this->post(route('favourites.reply', $reply->id));
+        $this->post(route('favourites.store', $reply->id));
+        $this->post(route('favourites.store', $reply->id));
 
         $this->assertEquals(1, $reply->favourites()->count());
     }
@@ -50,7 +50,7 @@ class FavouritesTest extends TestCase
         $reply = create('App\Reply');
 
         $reply->favourite(auth()->id());
-        $this->delete(route('unfavourites.reply', $reply->id));
+        $this->delete(route('favourites.destroy', $reply->id));
 
         $this->assertCount(0, $reply->favourites);
     }
