@@ -30,7 +30,7 @@
 
             <div class="row">
                 <div class="col-md-8">
-                    <replies :data="{{ $thread->replies }}"  @added="repliesCount++" @removed="repliesCount--"></replies>
+                    <replies @added="repliesCount++" @removed="repliesCount--"></replies>
                 </div>
             </div>
         </div>

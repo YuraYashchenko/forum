@@ -27,8 +27,10 @@ window.flash = function (message) {
 }
 
 Vue.component('flash', require('./components/Flash.vue'));
-Vue.component('replies', require('./components/Replies.vue'));
+Vue.component('paginator', require('./components/Paginator.vue'));
+
 Vue.component('thread-view', require('./components/pages/ThreadView.vue'));
+
 
 const app = new Vue({
     el: '#app'

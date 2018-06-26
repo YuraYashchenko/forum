@@ -10,7 +10,19 @@ class RepliesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['index']);
+    }
+
+    /**
+     * Fetch all replies.
+     *
+     * @param $channel
+     * @param Thread $thread
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function index($channel, Thread $thread)
+    {
+        return $thread->replies()->paginate(2);
     }
 
 

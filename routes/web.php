@@ -27,6 +27,7 @@ Route::get('threads/{channel}', 'ChannelsController@index')->name('sort.channel'
 
 Route::resource('replies', 'RepliesController')->only(['update', 'destroy']);
 Route::post('/threads/{channel}/{thread}/replies', 'RepliesController@store')->name('replies.store');
+Route::get('/threads/{channel}/{thread}/replies', 'RepliesController@index')->name('replies.index');
 
 Route::post('/replies/{reply}/favourites', 'FavouritesController@store')->name('favourites.reply');
 Route::delete('/replies/{reply}/favourites', 'FavouritesController@destroy')->name('unfavourites.reply');
