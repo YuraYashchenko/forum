@@ -21,4 +21,9 @@ class ThreadsFilter extends QueryFilter
 
         $this->builder->orderBy('replies_count', 'desc');
     }
+
+    public function unanswered()
+    {
+        $this->builder->where('replies_count', 0);
+    }
 }

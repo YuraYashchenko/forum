@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Reply;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -31,17 +32,6 @@ class ReadThreadTest extends TestCase
     {
         $this->get($this->thread->path())
             ->assertSee($this->thread->title);
-    }
-
-    /** @test */
-    public function a_user_can_read_a_reply()
-    {
-        $reply = create('App\Reply', [
-            'thread_id' => $this->thread->id
-        ]);
-
-        $this->get($this->thread->path())
-            ->assertSee($reply->body);
     }
 
     /** @test */
@@ -86,6 +76,18 @@ class ReadThreadTest extends TestCase
             ->json();
 
         $this->assertEquals([3, 2, 0], array_column($response, 'replies_count'));
+    }
+
+    /** @test */
+    public function a_user_can_fetch_unanswered_threads()
+    {
+        $unansweredThread = create('App\Thread');
+
+        create('App\Reply', ['thread_id' => $unansweredThread->id]);
+
+        $response = $this->getJson(route('threads.index') . '?unanswered')->json();
+
+        $this->assertCount(1, $response);
     }
 
     /** @test */

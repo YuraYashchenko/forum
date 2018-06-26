@@ -32,8 +32,7 @@ class ParticipateInThreadTest extends TestCase
 
         $this->post(route('replies.store', [$thread->channel->slug, $thread->id]), $reply->toArray());
 
-        $this->get($thread->path())
-            ->assertSee($reply->body);
+        $this->assertDatabaseHas('replies', ['body' => $reply->body]);
     }
 
     /** @test */

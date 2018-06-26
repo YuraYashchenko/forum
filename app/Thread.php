@@ -79,4 +79,36 @@ class Thread extends Model
     {
         return $this->belongsTo(Channel::class);
     }
+
+    /**
+     * A user can subscribe on a thread.
+     *
+     * @param $userId
+     */
+    public function subscribe(int $userId)
+    {
+        $this->subscriptions()->create([
+            'user_id' => $userId
+        ]);
+    }
+
+    /**
+     * A user can unsubscribe from a thread.
+     *
+     * @param $userId
+     */
+    public function unsubscribe(int $userId)
+    {
+        $this->subscriptions()->whereUserId($userId)->delete();
+    }
+
+    /**
+     * ThreadSubscription relation.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(ThreadSubscription::class);
+    }
 }

@@ -23,6 +23,10 @@
                             <a class="nav-link" href="{{ route('threads.index') . '?popular' }}">All popular threads</a>
                         </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('threads.index') . '?unanswered' }}">Unanswered threads</a>
+                        </li>
+
                         @auth
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('threads.index') . '?by=' . auth()->user()->name }}">My threads</a>

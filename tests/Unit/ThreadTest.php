@@ -52,4 +52,24 @@ class ThreadTest extends TestCase
 
         $this->assertCount(1, $this->thread->replies);
     }
+
+    /** @test */
+    public function it_can_be_subscribed_to_a_user()
+    {
+        $this->signIn();
+
+        $this->thread->subscribe(auth()->id());
+
+        $this->assertEquals(1, $this->thread->subscriptions()->where('user_id', auth()->id())->count());
+    }
+
+    /** @test */
+    public function it_can_be_unsubscribed_from_a_user()
+    {
+        $this->signIn();
+
+        $this->thread->unsubscribe(auth()->id());
+
+        $this->assertEquals(0, $this->thread->subscriptions()->where('user_id', auth()->id())->count());
+    }
 }
