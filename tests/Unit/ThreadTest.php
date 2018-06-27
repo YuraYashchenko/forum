@@ -64,6 +64,18 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
+    public function it_can_be_subscribed_to_a_user_one_time()
+    {
+        $this->signIn();
+
+        $this->thread->subscribe(auth()->id());
+        $this->thread->subscribe(auth()->id());
+
+
+        $this->assertEquals(1, $this->thread->subscriptions()->where('user_id', auth()->id())->count());
+    }
+
+    /** @test */
     public function it_can_be_unsubscribed_from_a_user()
     {
         $this->signIn();

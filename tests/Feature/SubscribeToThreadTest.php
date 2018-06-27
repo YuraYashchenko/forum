@@ -20,7 +20,7 @@ class SubscribeToThreadTest extends TestCase
             'thread' => $thread->id
         ]));
 
-
+        $this->assertCount(1, $thread->fresh()->subscriptions);
     }
 
     /** @test */
@@ -36,6 +36,6 @@ class SubscribeToThreadTest extends TestCase
             'thread' => $thread->id
         ]));
 
-//        $this->assertCount(0, $thread->fresh()->subscriptions);
+        $this->assertCount(0, $thread->fresh()->subscriptions);
     }
 }

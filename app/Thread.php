@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Filters\Filterable;
+use App\Notifications\ThreadWasUpdated;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -69,7 +70,15 @@ class Thread extends Model
      */
     public function addReply($reply)
     {
-        return $this->replies()->create($reply);
+        $reply =  $this->replies()->create($reply);
+
+        $this->subscriptions
+            ->filter(function ($subscription) use ($reply) {
+            return $subscription->user_id != $reply->user_id;
+        })
+            ->each->notify($this, $reply);
+
+        return $reply;
     }
 
     /**
@@ -86,12 +95,20 @@ class Thread extends Model
      * A user can subscribe on a thread.
      *
      * @param $userId
+     * @return $this
      */
     public function subscribe(int $userId)
     {
-        $this->subscriptions()->create([
+        $attributes = [
             'user_id' => $userId
-        ]);
+        ];
+
+        if (! $this->subscriptions()->where($attributes)->exists())
+        {
+            $this->subscriptions()->create($attributes);
+        }
+
+        return $this;
     }
 
     /**
