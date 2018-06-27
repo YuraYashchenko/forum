@@ -3,18 +3,23 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Notifications\DatabaseNotification;
 use Tests\TestCase;
 
 class NotificationTest extends TestCase
 {
     use DatabaseMigrations;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->signIn();
+    }
+
     /** @test */
     public function a_user_get_notification_when_thread_was_updated_not_to_user_that_created_this_thread()
     {
-        $this->withoutExceptionHandling();
-        $this->signIn();
-
         $thread = create('App\Thread')->subscribe(auth()->id());
 
         $thread->addReply([
@@ -35,14 +40,7 @@ class NotificationTest extends TestCase
     /** @test */
     public function a_user_can_delete_notifications()
     {
-        $this->signIn();
-
-        $thread = create('App\Thread')->subscribe(auth()->id());
-
-        $thread->addReply([
-            'body' => 'Body',
-            'user_id' => create('App\User')->id
-        ]);
+        create(DatabaseNotification::class);
 
         $this->assertCount(1, auth()->user()->unreadNotifications);
 
@@ -59,15 +57,7 @@ class NotificationTest extends TestCase
     /** @test */
     public function a_user_can_fetch_all_unread_notifications()
     {
-        $this->withoutExceptionHandling();
-        $this->signIn();
-
-        $thread = create('App\Thread')->subscribe(auth()->id());
-
-        $thread->addReply([
-            'body' => 'Body',
-            'user_id' => create('App\User')->id
-        ]);
+        create(DatabaseNotification::class);
 
         $response = $this->getJson(route('notifications.index', [
             'user' => auth()->user()->name
