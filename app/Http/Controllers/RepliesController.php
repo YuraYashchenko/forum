@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreReplyRequest;
 use App\Reply;
 use App\Rules\SpamFree;
 use App\SpamDetection\Spam;
@@ -34,28 +35,16 @@ class RepliesController extends Controller
      *
      * @param $channel
      * @param Thread $thread
-     * @param Spam $spam
+     * @param StoreReplyRequest $request
      * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * @internal param Spam $spam
      */
-    public function store($channel, Thread $thread, Spam $spam)
+    public function store($channel, Thread $thread, StoreReplyRequest $request)
     {
-        if (Gate::denies('create', new Reply))
-        {
-            return response('You leave a reply to frequently', 429);
-        }
-        try {
-            $this->validate(request(), [
-                'body' => ['required', new SpamFree]
-            ]);
-
-            $reply = $thread->addReply([
-                'body' => request('body'),
-                'user_id' => auth()->id()
-            ])->load('user');
-        } catch (\Exception $e) {
-            return response('Your reply cant be saved this time.', 422);
-        }
+        $reply = $thread->addReply([
+            'body' => request('body'),
+            'user_id' => auth()->id()
+        ])->load('user');
 
 
         return response($reply, 201);

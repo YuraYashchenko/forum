@@ -40,14 +40,13 @@ class ParticipateInThreadTest extends TestCase
     public function replies_that_contain_spam_should_not_be_created()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
 
         $thread = create('App\Thread');
         $reply = make('App\Reply', [
             'body' => 'yahoo customer support'
         ]);
 
-        $this->post(route('replies.store', [$thread->channel->slug, $thread->id]), $reply->toArray())
+        $this->json('post', route('replies.store', [$thread->channel->slug, $thread->id]), $reply->toArray())
             ->assertStatus(422);
     }
 
@@ -107,14 +106,13 @@ class ParticipateInThreadTest extends TestCase
         $reply = make('App\Reply', ['body' => null]);
         $thread = create('App\Thread');
 
-        $this->post(route('replies.store', [$thread->channel->slug, $thread->id]), $reply->toArray())
+        $this->json('post', route('replies.store', [$thread->channel->slug, $thread->id]), $reply->toArray())
             ->assertStatus(422);
     }
 
     /** @test */
     public function a_user_can_leave_a_reply_one_per_minute()
     {
-        $this->withoutExceptionHandling();
         $this->signIn();
 
         $reply = make('App\Reply');
@@ -124,6 +122,6 @@ class ParticipateInThreadTest extends TestCase
             ->assertStatus(201);
 
         $this->post(route('replies.store', [$thread->channel->slug, $thread->id]), $reply->toArray())
-            ->assertStatus(422);
+            ->assertStatus(429);
     }
 }
