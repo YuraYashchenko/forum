@@ -2,7 +2,10 @@
 
 namespace Tests\Unit;
 
+use App\Notifications\ThreadWasUpdated;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class ThreadTest extends TestCase
@@ -52,6 +55,22 @@ class ThreadTest extends TestCase
 
         $this->assertCount(1, $this->thread->replies);
     }
+    
+    /** @test */
+    public function it_notify_all_subscribers_when_the_reply_was_added()
+    {
+        Notification::fake();
+
+        $this->signIn()
+            ->thread
+            ->subscribe(auth()->id())
+            ->addReply([
+                'body' => 'Foo',
+                'user_id' => 999
+            ]);
+
+        Notification::assertSentTo(auth()->user(), ThreadWasUpdated::class);
+    }
 
     /** @test */
     public function it_can_be_subscribed_to_a_user()
@@ -93,5 +112,17 @@ class ThreadTest extends TestCase
         $this->thread->subscribe(auth()->id());
 
         $this->assertTrue($this->thread->isSubscribed);
+    }
+    
+    /** @test */
+    public function it_can_check_if_authenticated_user_hash_updated_threads()
+    {
+        $this->signIn();
+
+        $this->assertTrue($this->thread->hasUpdatesFor(auth()->user()));
+
+        auth()->user()->read($this->thread);
+
+        $this->assertFalse($this->thread->hasUpdatesFor(auth()->user()));
     }
 }

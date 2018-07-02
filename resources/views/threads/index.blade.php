@@ -8,7 +8,11 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <a href="{{ $thread->path() }}">
-                                {{ $thread->title }}
+                                @if (auth()->check() && $thread->hasUpdatesFor(auth()->user()))
+                                    <strong>{{ $thread->title }}</strong>
+                                @else
+                                    {{ $thread->title }}
+                                @endif
                             </a>
                             <strong>{{ $thread->replies_count }} {{ str_plural('reply', $thread->replies_count) }}</strong>
                         </div>

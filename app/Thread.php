@@ -72,13 +72,17 @@ class Thread extends Model
     {
         $reply =  $this->replies()->create($reply);
 
-        $this->subscriptions
-            ->filter(function ($subscription) use ($reply) {
-            return $subscription->user_id != $reply->user_id;
-        })
-            ->each->notify($this, $reply);
+        $this->notifySubscribers($reply);
 
         return $reply;
+    }
+
+    public function notifySubscribers($reply)
+    {
+        $this->subscriptions
+            ->where('user_id', '!=', $reply->user_id)
+            ->each
+            ->notify($this, $reply);
     }
 
     /**
@@ -131,10 +135,22 @@ class Thread extends Model
         return $this->hasMany(ThreadSubscription::class);
     }
 
+    /**
+     * Show is the authenticated user subscribed for th thread.
+     *
+     * @return bool
+     */
     public function getIsSubscribedAttribute()
     {
         return $this->subscriptions()
             ->where('user_id', auth()->id())
             ->exists();
+    }
+
+    public function hasUpdatesFor(User $user)
+    {
+        $key = $user->visitedThreadCacheKey($this);
+
+        return $this->updated_at > cache($key);
     }
 }
