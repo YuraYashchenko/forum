@@ -110,4 +110,20 @@ class ParticipateInThreadTest extends TestCase
         $this->post(route('replies.store', [$thread->channel->slug, $thread->id]), $reply->toArray())
             ->assertStatus(422);
     }
+
+    /** @test */
+    public function a_user_can_leave_a_reply_one_per_minute()
+    {
+        $this->withoutExceptionHandling();
+        $this->signIn();
+
+        $reply = make('App\Reply');
+        $thread = create('App\Thread');
+
+        $this->post(route('replies.store', [$thread->channel->slug, $thread->id]), $reply->toArray())
+            ->assertStatus(201);
+
+        $this->post(route('replies.store', [$thread->channel->slug, $thread->id]), $reply->toArray())
+            ->assertStatus(422);
+    }
 }

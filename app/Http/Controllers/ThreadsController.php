@@ -26,8 +26,7 @@ class ThreadsController extends Controller
             ->filter($filters)
             ->get();
 
-        if (request()->wantsJson())
-        {
+        if (request()->wantsJson()) {
             return $threads;
         }
 
@@ -47,12 +46,12 @@ class ThreadsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $validated = $this->validate($request, [
+        $this->validate($request, [
             'title' => ['required', new SpamFree],
             'body' => ['required', new SpamFree],
             'channel_id' => 'required|exists:channels,id'
@@ -77,8 +76,7 @@ class ThreadsController extends Controller
      */
     public function show($chanel, Thread $thread)
     {
-        if (auth()->check())
-        {
+        if (auth()->check()) {
             auth()->user()->read($thread);
         }
 
@@ -90,7 +88,7 @@ class ThreadsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Thread  $thread
+     * @param  \App\Thread $thread
      * @return \Illuminate\Http\Response
      */
     public function edit(Thread $thread)
@@ -101,8 +99,8 @@ class ThreadsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Thread  $thread
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Thread $thread
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Thread $thread)

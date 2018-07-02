@@ -6,6 +6,7 @@ use App\Reply;
 use App\Rules\SpamFree;
 use App\SpamDetection\Spam;
 use App\Thread;
+use Illuminate\Support\Facades\Gate;
 
 
 class RepliesController extends Controller
@@ -39,6 +40,10 @@ class RepliesController extends Controller
      */
     public function store($channel, Thread $thread, Spam $spam)
     {
+        if (Gate::denies('create', new Reply))
+        {
+            return response('You leave a reply to frequently', 429);
+        }
         try {
             $this->validate(request(), [
                 'body' => ['required', new SpamFree]

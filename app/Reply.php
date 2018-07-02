@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
@@ -35,10 +36,22 @@ class Reply extends Model
     }
 
     /**
+     * Url to reply.
+     *
      * @return string
      */
     public function path()
     {
         return $this->thread->path() . '#reply-' . $this->id;
+    }
+
+    /**
+     * Shows was the thread published greater than 1 min ago.
+     *
+     * @return bool
+     */
+    public function wasJustPublished() : bool
+    {
+        return $this->created_at->gt(Carbon::now()->subMinute());
     }
 }
