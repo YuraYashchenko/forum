@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Reply;
+use App\Rules\SpamFree;
 use App\SpamDetection\Spam;
 use App\Thread;
 
@@ -38,28 +39,42 @@ class RepliesController extends Controller
      */
     public function store($channel, Thread $thread, Spam $spam)
     {
-        $this->validate(request(), [
-            'body' => 'required'
-        ]);
-        $spam->detect(request('body'));
+        try {
+            $this->validate(request(), [
+                'body' => ['required', new SpamFree]
+            ]);
 
-        $reply = $thread->addReply([
-            'body' => request('body'),
-            'user_id' => auth()->id()
-        ])->load('user');
+            $reply = $thread->addReply([
+                'body' => request('body'),
+                'user_id' => auth()->id()
+            ])->load('user');
+        } catch (\Exception $e) {
+            return response('Your reply cant be saved this time.', 422);
+        }
+
 
         return response($reply, 201);
     }
 
+    /**
+     * @param Reply $reply
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
 
-        $this->validate(request(), [
-            'body' => 'required'
-        ]);
+        try {
+            $this->validate(request(), [
+                'body' => ['required', new SpamFree]
+            ]);
 
-        $reply->update(request(['body']));
+            $reply->update(request(['body']));
+        } catch (\Exception $e) {
+            return response('Your reply cant be saved this time.', 422);
+        }
+
+        return response('Your reply was updated', 200);
     }
 
     /**

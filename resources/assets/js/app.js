@@ -22,8 +22,8 @@ Vue.prototype.authorize = (handler) => {
  */
 
 window.events = new Vue();
-window.flash = function (message) {
-    window.events.$emit('flash', message);
+window.flash = function (message, level = 'success') {
+    window.events.$emit('flash', { message, level });
 }
 
 Vue.component('flash', require('./components/Flash.vue'));

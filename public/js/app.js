@@ -30394,7 +30394,9 @@ Vue.prototype.authorize = function (handler) {
 
 window.events = new Vue();
 window.flash = function (message) {
-    window.events.$emit('flash', message);
+    var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'success';
+
+    window.events.$emit('flash', { message: message, level: level });
 };
 
 Vue.component('flash', __webpack_require__(164));
@@ -64076,7 +64078,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['message'],
@@ -64084,7 +64085,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             body: '',
-            show: false
+            show: false,
+            level: ''
         };
     },
     created: function created() {
@@ -64108,9 +64110,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return _this2.show = false;
             }, 3000);
         },
-        flash: function flash(message) {
-            this.body = message;
+        flash: function flash(payload) {
+            this.body = payload.message;
             this.show = true;
+            this.level = payload.level;
 
             this.hide();
         }
@@ -64125,22 +64128,20 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      directives: [
-        {
-          name: "show",
-          rawName: "v-show",
-          value: this.show,
-          expression: "this.show"
-        }
-      ],
-      staticClass: "alert alert-success alert-message",
-      attrs: { role: "alert" }
-    },
-    [_c("strong", [_vm._v("Success!")]), _vm._v(" " + _vm._s(_vm.body) + "\n")]
-  )
+  return _c("div", {
+    directives: [
+      {
+        name: "show",
+        rawName: "v-show",
+        value: this.show,
+        expression: "this.show"
+      }
+    ],
+    staticClass: "alert alert-message",
+    class: "alert-" + _vm.level,
+    attrs: { role: "alert" },
+    domProps: { textContent: _vm._s(_vm.body) }
+  })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -64800,10 +64801,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.patch('/replies/' + this.data.id, {
                 body: this.body
-            }).then(function () {
+            }).then(function (response) {
                 _this2.editing = false;
 
-                flash('Updated!');
+                flash(response.data);
+            }).catch(function (error) {
+                return flash(error.response.data, 'danger');
             });
         },
         destroy: function destroy() {
@@ -65469,6 +65472,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 _this.body = '';
                 _this.$emit('created', data);
+
+                flash('You has been left a reply.');
+            }).catch(function (error) {
+                return flash(error.response.data, 'danger');
             });
         }
     }

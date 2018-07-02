@@ -36,11 +36,15 @@
         methods: {
             addReply() {
                 axios.post(this.endpoint, {
-                    body: this.body
-                }).then(({data}) => {
-                    this.body = '';
-                    this.$emit('created', data);
-                });
+                        body: this.body
+                    })
+                    .then(({data}) => {
+                        this.body = '';
+                        this.$emit('created', data)
+
+                        flash('You has been left a reply.')
+                    })
+                    .catch(error => flash(error.response.data, 'danger'));
             }
         }
     }

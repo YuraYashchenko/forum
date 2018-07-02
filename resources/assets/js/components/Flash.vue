@@ -1,6 +1,5 @@
 <template>
-    <div class="alert alert-success alert-message" v-show="this.show" role="alert">
-        <strong>Success!</strong> {{ body }}
+    <div class="alert alert-message" :class="'alert-' + level" v-show="this.show" role="alert" v-text="body">
     </div>
 </template>
 
@@ -11,7 +10,8 @@
        data () {
            return {
                body: '',
-               show: false
+               show: false,
+               level: ''
            };
        },
 
@@ -28,9 +28,10 @@
                 setTimeout(() => this.show = false, 3000);
             },
 
-            flash(message) {
-                this.body = message;
+            flash(payload) {
+                this.body = payload.message;
                 this.show = true;
+                this.level = payload.level;
 
                 this.hide();
             }

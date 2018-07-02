@@ -15,6 +15,7 @@ class Spam
      * Check all inspections.
      *
      * @param $text
+     * @return bool
      */
     public function detect($text)
     {
@@ -22,5 +23,7 @@ class Spam
         {
             app($inspection)->detect($text);
         }
+
+        return false;
     }
 }

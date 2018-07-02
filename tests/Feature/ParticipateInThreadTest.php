@@ -47,9 +47,8 @@ class ParticipateInThreadTest extends TestCase
             'body' => 'yahoo customer support'
         ]);
 
-        $this->expectException(Exception::class);
-
-        $this->post(route('replies.store', [$thread->channel->slug, $thread->id]), $reply->toArray());
+        $this->post(route('replies.store', [$thread->channel->slug, $thread->id]), $reply->toArray())
+            ->assertStatus(422);
     }
 
     /** @test */
@@ -109,6 +108,6 @@ class ParticipateInThreadTest extends TestCase
         $thread = create('App\Thread');
 
         $this->post(route('replies.store', [$thread->channel->slug, $thread->id]), $reply->toArray())
-            ->assertSessionHasErrors('body');
+            ->assertStatus(422);
     }
 }
