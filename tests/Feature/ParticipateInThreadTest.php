@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Exception;
 use Tests\TestCase;
 
 
@@ -33,6 +34,22 @@ class ParticipateInThreadTest extends TestCase
         $this->post(route('replies.store', [$thread->channel->slug, $thread->id]), $reply->toArray());
 
         $this->assertDatabaseHas('replies', ['body' => $reply->body]);
+    }
+    
+    /** @test */
+    public function replies_that_contain_spam_should_not_be_created()
+    {
+        $this->signIn();
+        $this->withoutExceptionHandling();
+
+        $thread = create('App\Thread');
+        $reply = make('App\Reply', [
+            'body' => 'yahoo customer support'
+        ]);
+
+        $this->expectException(Exception::class);
+
+        $this->post(route('replies.store', [$thread->channel->slug, $thread->id]), $reply->toArray());
     }
 
     /** @test */
