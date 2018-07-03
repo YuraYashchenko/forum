@@ -3,6 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
@@ -53,5 +54,17 @@ class Reply extends Model
     public function wasJustPublished() : bool
     {
         return $this->created_at->gt(Carbon::now()->subMinute());
+    }
+
+    /**
+     * Get all mentioned users in the reply body.
+     *
+     * @return Collection
+     */
+    public function mentionedUsers() : Collection
+    {
+        preg_match_all('/\@([^\s\.]+)/', $this->body, $matches);
+
+        return collect($matches[1]);
     }
 }

@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreReplyRequest;
 use App\Reply;
 use App\Rules\SpamFree;
-use App\SpamDetection\Spam;
 use App\Thread;
-use Illuminate\Support\Facades\Gate;
 
 
 class RepliesController extends Controller
@@ -45,7 +43,6 @@ class RepliesController extends Controller
             'body' => request('body'),
             'user_id' => auth()->id()
         ])->load('user');
-
 
         return response($reply, 201);
     }
