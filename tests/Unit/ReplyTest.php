@@ -39,4 +39,14 @@ class ReplyTest extends TestCase
 
         $this->assertEquals(['johnDoe', 'janeDoe'],  $reply->mentionedUsers());
     }
+
+    /** @test */
+    public function it_should_transform_reply_if_it_has_mentioned_users()
+    {
+        $reply = create('App\Reply', [
+            'body' => 'Hey, @janeDoe!'
+        ]);
+
+        $this->assertEquals('Hey, <a href="/profiles/janeDoe">@janeDoe</a>!', $reply->body);
+    }
 }
