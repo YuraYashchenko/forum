@@ -37,6 +37,6 @@ class ReplyTest extends TestCase
             'body' => '@johnDoe .. @janeDoe'
         ]);
 
-        $this->assertEquals(['johnDoe', 'janeDoe'],  $reply->mentionedUsers()->toArray());
+        $this->assertEquals(['johnDoe', 'janeDoe'],  $reply->mentionedUsers());
     }
 }

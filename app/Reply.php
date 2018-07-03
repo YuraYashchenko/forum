@@ -3,7 +3,6 @@
 namespace App;
 
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
@@ -59,12 +58,12 @@ class Reply extends Model
     /**
      * Get all mentioned users in the reply body.
      *
-     * @return Collection
+     * @return array
      */
-    public function mentionedUsers() : Collection
+    public function mentionedUsers() : array
     {
         preg_match_all('/\@([^\s\.]+)/', $this->body, $matches);
 
-        return collect($matches[1]);
+        return $matches[1];
     }
 }
